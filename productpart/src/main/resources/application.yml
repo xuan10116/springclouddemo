@@ -1,0 +1,31 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: service-product #服务名称
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: mysql8015
+  jpa:
+    database: MySQL
+    show-sql: true
+    open-in-view: true
+
+#配置eureka server
+  #自己提取的配置键
+myeurekaserver:
+  hostname: localhost
+  port: 9000
+eureka:
+  client:
+    service-url:
+      #此次将当前微服务注册到两个server上，其实若两个eureka server相互注册后，他们会进行信息同步，相互都拥有注册的微服务
+      #defaultZone: http://localhost:8000/eureka/,http://localhost:9000/eureka/
+      defaultZone: http://${myeurekaserver.hostname}:${myeurekaserver.port}/eureka/
+  instance:
+    prefer-ip-address: true #使用ip地址进行注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} #向注册中心注册服务ip，eureka的控制页面就可以看到ip形式了
+    lease-renewal-interval-in-seconds: 5 #心跳的间隔
+    lease-expiration-duration-in-seconds: 10 #续约到期的时间，如果该时间内注册中心没有接收到我的消息，那可以认为我宕机了

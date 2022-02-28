@@ -1,0 +1,22 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: order-product
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=GMT&useUnicode=true&characterEncoding=utf8
+    username: root
+    password: mysql8015
+  jpa:
+    database: MySQL
+    show-sql: true
+    open-in-view: true
+
+#配置eureka server
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8000/eureka/,http://localhost:9000/eureka/
+  instance:
+    prefer-ip-address: true #使用ip地址进行注册
