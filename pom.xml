@@ -12,6 +12,7 @@
         <module>productpart</module>
         <module>orderpart</module>
         <module>eurakaserver</module>
+        <module>import_test</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
