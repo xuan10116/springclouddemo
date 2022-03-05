@@ -31,3 +31,14 @@ eureka:
 #    OkToRetryOnAllOperations: true # 是否对所有操作都进行重试
 #    MaxAutoRetriesNextServer: 1 # 切换微服务实例的重试次数
 #    MaxAutoRetries: 1 # 对当前微服务实例的重试次数
+
+#feign 日志的配置
+feign:
+  client:
+    config:
+      service-product:
+        loggerLevel: FULL
+#真正的日志数据，这里精确到了我们关注的类的日志配置
+logging:
+  level:
+    com.learn.order.feign.ProductFeignClient: debug
