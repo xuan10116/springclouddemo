@@ -33,7 +33,16 @@ public class OrderController {
 
     @Autowired
     RestTemplate restTemplate;
+    //2，Eureka借助Ribbon，通过“服务名”自动选择注册中心对应的微服务
+    @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
+    public Product findById(@PathVariable Long id){
+        Product product = null;
+        product = restTemplate.getForObject("http://service-product/"+"product/"+id,Product.class);
+        return product;
+    }
 
+/*
+    //1，单纯的使用Eureka，手动选择对应的微服务拼接ip
     @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id){
         //调用discoveryClient方法
@@ -45,7 +54,7 @@ public class OrderController {
         return restTemplate.getForObject("http://"+instance.getHost()+":"+instance.getPort()+"/product/"+id,Product.class);
 
         //手动拼接服务的url
-//        return restTemplate.getForObject("http://127.0.0.1:9001/product/"+id,Product.class);
+        //return restTemplate.getForObject("http://127.0.0.1:9001/product/"+id,Product.class);
     }
-
+*/
 }
