@@ -1,6 +1,7 @@
 package com.learn.order.controller;
 
 import com.learn.order.entity.Product;
+import com.learn.order.feign.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -23,16 +24,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-    /*
-    * 注入 DiscoveryClient【注意使用springcloud包下的】：
-    *   spring cloud提供的获取原数组的工具类
-    *       调用方法获取服务的元数据信息
-    * */
+//    3，使用feign的方式
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private ProductFeignClient productFeignClient;
 
-    @Autowired
+    @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
+    public Product findById(@PathVariable Long id){
+        Product product = null;
+        product = productFeignClient.findById(id);
+        return product;
+    }
+
+
+/*
+   @Autowired
     RestTemplate restTemplate;
+*/
+
+/*
     //2，Eureka借助Ribbon，通过“服务名”自动选择注册中心对应的微服务
     @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id){
@@ -40,9 +49,17 @@ public class OrderController {
         product = restTemplate.getForObject("http://service-product/"+"product/"+id,Product.class);
         return product;
     }
+*/
 
 /*
-    //1，单纯的使用Eureka，手动选择对应的微服务拼接ip
+    //1，单纯的使用Eureka，根据通过DiscoveryClient获得的元数据手动选择对应的微服务拼接ip
+
+//     注入 DiscoveryClient【注意使用springcloud包下的】：
+//       spring cloud提供的获取原数组的工具类
+//           调用方法获取服务的元数据信息
+    @Autowired
+    private DiscoveryClient discoveryClient;
+
     @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id){
         //调用discoveryClient方法
