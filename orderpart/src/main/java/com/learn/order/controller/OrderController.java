@@ -1,5 +1,6 @@
 package com.learn.order.controller;
 
+import com.learn.order.command.OrderCommand;
 import com.learn.order.entity.Product;
 import com.learn.order.feign.ProductFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,10 @@ public class OrderController {
     @Autowired
     RestTemplate restTemplate;
 
+    //使用OrderCommand调用远程服务
     @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id){
-        return restTemplate.getForObject("http://127.0.0.1:9001/product/"+id,Product.class);
+        return new OrderCommand(restTemplate,id).execute();
     }
 
     //单纯的模拟一个非使用远程调用的一个方法
