@@ -24,54 +24,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-//    3，使用feign的方式
+
     @Autowired
-    private ProductFeignClient productFeignClient;
-
-    @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
-    public Product findById(@PathVariable Long id){
-        Product product = null;
-        product = productFeignClient.findById(id);
-        return product;
-    }
-
-
-/*
-   @Autowired
     RestTemplate restTemplate;
-*/
-
-/*
-    //2，Eureka借助Ribbon，通过“服务名”自动选择注册中心对应的微服务
-    @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
-    public Product findById(@PathVariable Long id){
-        Product product = null;
-        product = restTemplate.getForObject("http://service-product/"+"product/"+id,Product.class);
-        return product;
-    }
-*/
-
-/*
-    //1，单纯的使用Eureka，根据通过DiscoveryClient获得的元数据手动选择对应的微服务拼接ip
-
-//     注入 DiscoveryClient【注意使用springcloud包下的】：
-//       spring cloud提供的获取原数组的工具类
-//           调用方法获取服务的元数据信息
-    @Autowired
-    private DiscoveryClient discoveryClient;
 
     @RequestMapping(value = "/buy/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id){
-        //调用discoveryClient方法
-        //通过调用服务名称获取所有元数据
-        List<ServiceInstance> instances = discoveryClient.getInstances("service-product");
-        //此时，演示案例中我们只向eureka server中注册了一个product服务
-        ServiceInstance instance = instances.get(0);
-        //拿到元数据的主机地址和端口号，拼接请求微服务的URL
-        return restTemplate.getForObject("http://"+instance.getHost()+":"+instance.getPort()+"/product/"+id,Product.class);
-
-        //手动拼接服务的url
-        //return restTemplate.getForObject("http://127.0.0.1:9001/product/"+id,Product.class);
+        return restTemplate.getForObject("http://127.0.0.1:9001/product/"+id,Product.class);
     }
-*/
+
+    //单纯的模拟一个非使用远程调用的一个方法
+    @RequestMapping(value = "/{id}",method = RequestMethod.GET)
+    public String unableFunction(@PathVariable Long id){
+        return "No."+id+",product";
+    }
+
 }

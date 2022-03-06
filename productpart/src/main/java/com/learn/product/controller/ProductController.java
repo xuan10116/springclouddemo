@@ -22,6 +22,12 @@ public class ProductController {
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
     public Product findById(@PathVariable Long id) {
+        //模拟时间较长的操作
+        try {
+            Thread.sleep(2000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Product product = productService.findById(id);
         product.setProductName("当前微服务地址："+curIp+":"+curPort);
         return product;
